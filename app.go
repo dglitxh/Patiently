@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/rs/xid"
 	"net/http"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/rs/xid"
 )
 
 type Patient struct {
 	ID         string    `json:"id"`
-	Name       string    `json:"title"`
+	Name       string    `json:"name"`
 	Insurance  string    `json:"insurance"`
 	DOB        string    `json:"DOB"`
 	Occupation string    `json:"occupation"`
