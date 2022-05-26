@@ -54,11 +54,38 @@ func NewPatientHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, patient)
 }
 
+func UpdatePatient(c *gin.Context) {
+	id := c.Param("id")
+	var patient Patient
+	if err := c.ShouldBindJSON(&patient); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error()})
+		return
+	}
+	index := -1
+	for i := 0; i < len(patients); i++ {
+		if patients[i].ID == id {
+			index = i
+		}
+	}
+
+	if index == -1 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Patient not found",
+		})
+		return
+	}
+
+	patients[index] = patient
+	c.JSON(http.StatusOK, patient)
+}
+
 func main() {
 	fmt.Println(patients, "ei")
 	router := gin.Default()
 	router.GET("/patients", getPatients)
 	router.POST("/patients", NewPatientHandler)
+	router.PUT("/patients/:id", UpdatePatient)
 	router.Run("localhost:6600")
 
 }
