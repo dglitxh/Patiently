@@ -36,8 +36,10 @@ func init() {
 	})
 }
 
-func getPatients(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, patients)
+func GetPatients(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, gin.H{
+		"result": patients,
+	})
 }
 
 func NewPatientHandler(c *gin.Context) {
@@ -51,10 +53,11 @@ func NewPatientHandler(c *gin.Context) {
 	patient.ID = xid.New().String()
 	patient.TimeAdded = time.Now()
 	patients = append(patients, patient)
-	c.JSON(http.StatusOK, patient)
+	c.JSON(http.StatusOK, gin.H{
+		"result": patient})
 }
 
-func UpdatePatient(c *gin.Context) {
+func UpdatePatientHandler(c *gin.Context) {
 	id := c.Param("id")
 	var patient Patient
 	if err := c.ShouldBindJSON(&patient); err != nil {
@@ -80,7 +83,7 @@ func UpdatePatient(c *gin.Context) {
 	c.JSON(http.StatusOK, patient)
 }
 
-func deletePatientHandler(c *gin.Context) {
+func DeletePatientHandler(c *gin.Context) {
 	id := c.Param("id")
 
 	index := -1
@@ -101,7 +104,7 @@ func deletePatientHandler(c *gin.Context) {
 	})
 }
 
-func getPatientById(c *gin.Context) {
+func GetPatientById(c *gin.Context) {
 	id := c.Param("id")
 
 	index := -1
@@ -116,16 +119,17 @@ func getPatientById(c *gin.Context) {
 		})
 	}
 
-	c.JSON(http.StatusOK, patients[index])
+	c.JSON(http.StatusOK, gin.H{
+		"result": patients[index]})
 }
 
 func main() {
 	fmt.Println(patients, "ei")
 	router := gin.Default()
-	router.GET("/patients", getPatients)
-	router.GET("/patients/:id", getPatientById)
+	router.GET("/patients", GetPatients)
+	router.GET("/patients/:id", GetPatientById)
 	router.POST("/patients", NewPatientHandler)
-	router.PUT("/patients/:id", UpdatePatient)
-	router.DELETE("/patients/:id", deletePatientHandler)
+	router.PUT("/patients/:id", UpdatePatientHandler)
+	router.DELETE("/patients/:id", DeletePatientHandler)
 	router.Run("localhost:6600")
 }
