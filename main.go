@@ -124,7 +124,6 @@ func GetPatientById(c *gin.Context) {
 }
 
 func main() {
-	fmt.Println(patients, "ei")
 	router := gin.Default()
 	router.GET("/patients", GetPatients)
 	router.GET("/patients/:id", GetPatientById)
