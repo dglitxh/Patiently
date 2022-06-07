@@ -3,18 +3,18 @@ package config
 import "github.com/spf13/viper"
 
 type Config struct {
-	Port  string `mapstructure: "PORT"`
+	Port  int    `mapstructure: "PORT"`
 	DBUrl string `mapstructure: "DB_URL`
 }
 
 func LoadConfig() (c Config, err error) {
 	viper.AddConfigPath("./common/config/envs")
 	viper.SetConfigName("dev")
-	viper.setConfigType("env")
+	viper.SetConfigType("env")
 
 	viper.AutomaticEnv()
 
-	err = viper.ReadConfig()
+	err = viper.ReadInConfig()
 
 	if err != nil {
 		return
