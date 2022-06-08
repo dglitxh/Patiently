@@ -1,4 +1,4 @@
-module example/web-service
+module github.com/dglitxh/patiently
 
 go 1.17
 
