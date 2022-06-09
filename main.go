@@ -4,8 +4,10 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/dglitxh/patiently/common/db"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/xid"
+	"github.com/spf13/viper"
 )
 
 type Patient struct {
@@ -123,7 +125,17 @@ func GetPatientById(c *gin.Context) {
 }
 
 func main() {
+	viper.SetConfigFile("./common/envs/.env")
+	viper.ReadInConfig()
+
+	db_url := viper.Get("DB_URL").(string)
 	router := gin.Default()
+	db.InitDb(db_url)
+	router.GET("/", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{
+			"response": "We live bruh",
+		})
+	})
 	router.GET("/patients", GetPatients)
 	router.GET("/patients/:id", GetPatientById)
 	router.POST("/patients", NewPatientHandler)
