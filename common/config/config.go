@@ -3,12 +3,12 @@ package config
 import "github.com/spf13/viper"
 
 type Config struct {
-	Port  int    `mapstructure: "PORT"`
+	PORT  int    `mapstructure: "PORT"`
 	DBUrl string `mapstructure: "DB_URL`
 }
 
 func LoadConfig() (c Config, err error) {
-	viper.AddConfigPath("./common/config/envs")
+	viper.AddConfigPath("./common/envs")
 	viper.SetConfigName("dev")
 	viper.SetConfigType("env")
 
