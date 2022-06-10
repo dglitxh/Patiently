@@ -10,3 +10,10 @@ type Patient struct {
 	Occupation string `json:"occupation"`
 	Gender     string `json:"gender"`
 }
+
+type MedicalHx struct {
+	Code      string   `json:"code"`
+	Diagnosis string   `json:"diagnosis"`
+	PhysExam  string   `json:"physExam"`
+	PastHx    []string `json:"pastHx"`
+}
