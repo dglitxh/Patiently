@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/dglitxh/patiently/common/db"
+	"github.com/dglitxh/patiently/controllers/patients"
 	"github.com/gin-gonic/gin"
-	"github.com/rs/xid"
 	"github.com/spf13/viper"
 )
 
@@ -27,119 +27,125 @@ type MedicalHx struct {
 	PastHx    []string `json:"pastHx"`
 }
 
-var patients []Patient
+// var patients []Patient
 
-func init() {
-	patients = make([]Patient, 0)
-	patients = append(patients, Patient{
-		ID: xid.New().String(), Name: "fly Boy", Insurance: "323u78r", DOB: "22-06-1994", Occupation: "Lawyer",
-		Gender: "Male", TimeAdded: time.Now(),
-	})
-}
+// func init() {
+// 	patients = make([]Patient, 0)
+// 	patients = append(patients, Patient{
+// 		ID: xid.New().String(), Name: "fly Boy", Insurance: "323u78r", DOB: "22-06-1994", Occupation: "Lawyer",
+// 		Gender: "Male", TimeAdded: time.Now(),
+// 	})
+// }
 
-func GetPatients(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, gin.H{
-		"result": patients,
-	})
-}
+// func GetPatients(c *gin.Context) {
+// 	c.IndentedJSON(http.StatusOK, gin.H{
+// 		"result": patients,
+// 	})
+// }
 
-func NewPatientHandler(c *gin.Context) {
-	var patient Patient
-	if err := c.ShouldBindJSON(&patient); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-	patient.ID = xid.New().String()
-	patient.TimeAdded = time.Now()
-	patients = append(patients, patient)
-	c.JSON(http.StatusOK, gin.H{
-		"result": patient})
-}
+// func NewPatientHandler(c *gin.Context) {
+// 	var patient Patient
+// 	if err := c.ShouldBindJSON(&patient); err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{
+// 			"error": err.Error(),
+// 		})
+// 		return
+// 	}
+// 	patient.ID = xid.New().String()
+// 	patient.TimeAdded = time.Now()
+// 	patients = append(patients, patient)
+// 	c.JSON(http.StatusOK, gin.H{
+// 		"result": patient})
+// }
 
-func UpdatePatientHandler(c *gin.Context) {
-	id := c.Param("id")
-	var patient Patient
-	if err := c.ShouldBindJSON(&patient); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error()})
-		return
-	}
-	index := -1
-	for i := 0; i < len(patients); i++ {
-		if patients[i].ID == id {
-			index = i
-		}
-	}
+// func UpdatePatientHandler(c *gin.Context) {
+// 	id := c.Param("id")
+// 	var patient Patient
+// 	if err := c.ShouldBindJSON(&patient); err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{
+// 			"error": err.Error()})
+// 		return
+// 	}
+// 	index := -1
+// 	for i := 0; i < len(patients); i++ {
+// 		if patients[i].ID == id {
+// 			index = i
+// 		}
+// 	}
 
-	if index == -1 {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Patient not found",
-		})
-		return
-	}
+// 	if index == -1 {
+// 		c.JSON(http.StatusNotFound, gin.H{
+// 			"error": "Patient not found",
+// 		})
+// 		return
+// 	}
 
-	patients[index] = patient
-	c.JSON(http.StatusOK, patient)
-}
+// 	patients[index] = patient
+// 	c.JSON(http.StatusOK, patient)
+// }
 
-func DeletePatientHandler(c *gin.Context) {
-	id := c.Param("id")
+// func DeletePatientHandler(c *gin.Context) {
+// 	id := c.Param("id")
 
-	index := -1
-	for i := 0; i < len(patients); i++ {
-		if patients[i].ID == id {
-			index = i
-		}
-	}
+// 	index := -1
+// 	for i := 0; i < len(patients); i++ {
+// 		if patients[i].ID == id {
+// 			index = i
+// 		}
+// 	}
 
-	if index == -1 {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Patient with id " + id + " was not found",
-		})
-	}
-	patients = append(patients[:index], patients[index+1:]...)
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Patient with id " + id + " has been deleted",
-	})
-}
+// 	if index == -1 {
+// 		c.JSON(http.StatusNotFound, gin.H{
+// 			"error": "Patient with id " + id + " was not found",
+// 		})
+// 	}
+// 	patients = append(patients[:index], patients[index+1:]...)
+// 	c.JSON(http.StatusOK, gin.H{
+// 		"message": "Patient with id " + id + " has been deleted",
+// 	})
+// }
 
-func GetPatientById(c *gin.Context) {
-	id := c.Param("id")
+// func GetPatientById(c *gin.Context) {
+// 	id := c.Param("id")
 
-	index := -1
-	for i := 0; i < len(patients); i++ {
-		if patients[i].ID == id {
-			index = i
-		}
-	}
-	if index == -1 {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Patient with id " + id + " was not found",
-		})
-	}
+// 	index := -1
+// 	for i := 0; i < len(patients); i++ {
+// 		if patients[i].ID == id {
+// 			index = i
+// 		}
+// 	}
+// 	if index == -1 {
+// 		c.JSON(http.StatusNotFound, gin.H{
+// 			"error": "Patient with id " + id + " was not found",
+// 		})
+// 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"result": patients[index]})
-}
+// 	c.JSON(http.StatusOK, gin.H{
+// 		"result": patients[index]})
+// }
 
 func main() {
 	viper.SetConfigFile("./common/envs/.env")
 	viper.ReadInConfig()
 
 	db_url := viper.Get("DB_URL").(string)
-	router := gin.Default()
-	db.InitDb(db_url)
-	router.GET("/", func(ctx *gin.Context) {
+	port := viper.GetString("PORT")
+
+	r := gin.Default()
+	h := db.InitDb(db_url)
+
+	patients.RegRoutes(r, h)
+
+	r.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
 			"response": "We live bruh",
 		})
 	})
-	router.GET("/patients", GetPatients)
-	router.GET("/patients/:id", GetPatientById)
-	router.POST("/patients", NewPatientHandler)
-	router.PUT("/patients/:id", UpdatePatientHandler)
-	router.DELETE("/patients/:id", DeletePatientHandler)
-	router.Run("localhost:6600")
+
+	// router.GET("/patients", GetPatients)
+	// router.GET("/patients/:id", GetPatientById)
+	// router.POST("/patients", NewPatientHandler)
+	// router.PUT("/patients/:id", UpdatePatientHandler)
+	// router.DELETE("/patients/:id", DeletePatientHandler)
+	r.Run(port)
 }

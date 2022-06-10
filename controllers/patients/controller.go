@@ -16,6 +16,9 @@ func RegRoutes(r *gin.Engine, db *gorm.DB) {
 
 	route := r.Group("/patients")
 	route.GET("", h.GetPatients)
+	route.GET("/:id", h.GetPatientById)
 	route.POST("", h.NewPatientHandler)
+	route.PUT("/:id", h.UpdatePatientHandler)
+	route.DELETE("/:id", h.DeletePatient)
 
 }
