@@ -2,16 +2,19 @@ package patients
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
 )
 
 type handler struct {
-	DB *gorm.DB
+	DB  *gorm.DB
+	RDB *redis.Client
 }
 
-func RegRoutes(r *gin.Engine, db *gorm.DB) {
+func RegRoutes(r *gin.Engine, db *gorm.DB, rdb *redis.Client) {
 	h := &handler{
-		DB: db,
+		DB:  db,
+		RDB: rdb,
 	}
 
 	route := r.Group("/patients")
