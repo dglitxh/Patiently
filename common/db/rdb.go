@@ -1,6 +1,6 @@
 package db
 
-import "github.com/go-redis/redis"
+import "github.com/go-redis/redis/v8"
 
 func InitRdb() *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
