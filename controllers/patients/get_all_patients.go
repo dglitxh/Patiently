@@ -1,6 +1,8 @@
 package patients
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -35,16 +37,32 @@ func (h handler) GetPatients(c *gin.Context) {
 	page_size := c.DefaultQuery("page_size", "20")
 	var patients []models.Patient
 
-	if results := h.DB.Scopes(Paginate(c.Request)).Find(&patients); results.Error != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{
-			"status": results.Error,
+	cache, err := h.RDB.Get(h.RDB.Context(), "patients"+page).Result()
+
+	if err != nil {
+		fmt.Println("Request To DB")
+		if results := h.DB.Scopes(Paginate(c.Request)).Find(&patients); results.Error != nil {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{
+				"status": results.Error,
+			})
+			return
+		}
+
+		data, _ := json.Marshal(patients)
+		h.RDB.Set(h.RDB.Context(), "patients"+page, string(data), 0)
+		c.IndentedJSON(http.StatusOK, gin.H{
+			"page":      page,
+			"page size": page_size,
+			"results":   &patients,
 		})
-		return
+	} else {
+		fmt.Println("Request To Redis")
+		json.Unmarshal([]byte(cache), &patients)
+		c.IndentedJSON(http.StatusOK, gin.H{
+			"page":      page,
+			"page size": page_size,
+			"results":   &patients,
+		})
 	}
 
-	c.IndentedJSON(http.StatusOK, gin.H{
-		"page":      page,
-		"page size": page_size,
-		"results":   &patients,
-	})
 }
