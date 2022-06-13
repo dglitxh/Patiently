@@ -23,6 +23,9 @@ func (h handler) NewPatientHandler(c *gin.Context) {
 		})
 		return
 	}
+
+	h.ClearRdb()
+
 	c.IndentedJSON(http.StatusOK, gin.H{
 		"result": &patient})
 }

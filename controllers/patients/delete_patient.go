@@ -19,6 +19,7 @@ func (h handler) DeletePatient(c *gin.Context) {
 	}
 
 	h.DB.Delete(&patient)
+	h.ClearRdb()
 
 	c.IndentedJSON(http.StatusOK, gin.H{
 		"status": "Patient with id " + id + " has been deleted",
