@@ -33,6 +33,7 @@ func (h handler) UpdatePatientHandler(c *gin.Context) {
 	patient.Occupation = body.Occupation
 
 	h.DB.Save(&patient)
+	h.ClearRdb()
 
 	c.IndentedJSON(http.StatusOK, gin.H{
 		"result": &patient,
