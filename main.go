@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/dglitxh/patiently/common/db"
+	"github.com/dglitxh/patiently/controllers/auth"
 	"github.com/dglitxh/patiently/controllers/patients"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -23,6 +24,7 @@ func main() {
 
 	fmt.Println(redi.Ping(redi.Context()))
 	patients.RegRoutes(r, h, redi)
+	auth.RegAuthRoutes(r, h)
 
 	r.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"status": "We are LIVE!!!"})
