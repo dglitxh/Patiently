@@ -3,6 +3,7 @@ package patients
 import (
 	"fmt"
 
+	"github.com/dglitxh/patiently/controllers/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
@@ -49,8 +50,10 @@ func RegRoutes(r *gin.Engine, db *gorm.DB, rdb *redis.Client) {
 	route := r.Group("/patients")
 	route.GET("", h.GetPatients)
 	route.GET("/:id", h.GetPatientById)
-	route.POST("", h.NewPatientHandler)
-	route.PUT("/:id", h.UpdatePatientHandler)
-	route.DELETE("/:id", h.DeletePatient)
+
+	auth := route.Use(middleware.AuthMiddleware())
+	auth.POST("", h.NewPatientHandler)
+	auth.PUT("/:id", h.UpdatePatientHandler)
+	auth.DELETE("/:id", h.DeletePatient)
 
 }
