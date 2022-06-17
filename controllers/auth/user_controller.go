@@ -3,6 +3,7 @@ package auth
 import (
 	"time"
 
+	"github.com/dglitxh/patiently/controllers/middleware"
 	"github.com/dglitxh/patiently/models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -48,6 +49,8 @@ func RegAuthRoutes(router *gin.Engine, db *gorm.DB) {
 	r := router.Group("/auth")
 	r.POST("/signup", h.SignupHandler)
 	r.POST("/login", h.LoginHandler)
-	r.GET("/users", h.GetUsers)
-	r.GET("/user/:id", h.GetUser)
+
+	auth := r.Use(middleware.AuthMiddleware())
+	auth.GET("/users", h.GetUsers)
+	auth.GET("/user/:id", h.GetUser)
 }
