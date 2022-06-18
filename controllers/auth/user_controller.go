@@ -11,8 +11,7 @@ import (
 )
 
 type handler struct {
-	DB      *gorm.DB
-	SignJWT models.JWTOutput
+	DB *gorm.DB
 }
 
 func SignJWT(username, jwt_secret string) *models.JWTOutput {
@@ -53,4 +52,5 @@ func RegAuthRoutes(router *gin.Engine, db *gorm.DB) {
 	auth := r.Use(middleware.AuthMiddleware())
 	auth.GET("/users", h.GetUsers)
 	auth.GET("/user/:id", h.GetUser)
+	auth.GET("/refresh", RefreshJwt)
 }
