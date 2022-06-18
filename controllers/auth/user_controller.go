@@ -52,4 +52,5 @@ func RegAuthRoutes(router *gin.Engine, db *gorm.DB) {
 	auth := r.Use(middleware.AuthMiddleware())
 	auth.GET("/users", h.GetUsers)
 	auth.GET("/user/:id", h.GetUser)
+	auth.GET("/refresh", RefreshJwt)
 }
