@@ -11,8 +11,7 @@ import (
 )
 
 type handler struct {
-	DB      *gorm.DB
-	SignJWT models.JWTOutput
+	DB *gorm.DB
 }
 
 func SignJWT(username, jwt_secret string) *models.JWTOutput {
