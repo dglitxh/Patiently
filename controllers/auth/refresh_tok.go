@@ -23,11 +23,12 @@ func RefreshJwt(c *gin.Context) {
 	expirationTime := time.Now().Add(5 * time.Minute)
 	claims.ExpiresAt = expirationTime.Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(viper.Get("JWT_SECRET").(string))
+	tokenString, err := token.SignedString([]byte(viper.Get("JWT_SECRET").(string)))
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError,
-			gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
 		return
 	}
 
