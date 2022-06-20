@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/dglitxh/patiently/models"
+	"github.com/gin-contrib/sessions"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 
@@ -65,8 +66,13 @@ func (h handler) SignupHandler(c *gin.Context) {
 
 	JWT := SignJWT(creds.Username, secret)
 
+	session := sessions.Default(c)
+	session.Set("token", JWT.Token)
+	session.Set("email", creds.Email)
+	session.Set("username", creds.Username)
+	session.Save()
+
 	c.IndentedJSON(http.StatusOK, gin.H{
-		"id":    &creds.Id,
-		"token": JWT,
+		"message": "new user authenticated succesfully",
 	})
 }

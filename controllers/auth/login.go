@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/dglitxh/patiently/models"
+	"github.com/gin-contrib/sessions"
 	"github.com/spf13/viper"
 
 	"github.com/gin-gonic/gin"
@@ -23,7 +24,7 @@ func (h handler) LoginHandler(c *gin.Context) {
 
 	if res := h.DB.First(&user, "email=?", &creds.Email); res.Error != nil {
 		c.IndentedJSON(http.StatusNotFound, gin.H{
-			"status": "Authentication failed",
+			"status": "Authentication failed: wrong email or password",
 		})
 		return
 	}
@@ -31,18 +32,22 @@ func (h handler) LoginHandler(c *gin.Context) {
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(creds.Password))
 	if err != nil {
 		c.IndentedJSON(http.StatusForbidden, gin.H{
-			"status": "crypt: Authentication failed",
+			"status": "Authentication failed: wrong email or password",
 		})
 		return
 	}
 
-	secret := viper.Get("JWT_Secret").(string)
+	secret := viper.GetString("JWT_Secret")
 
 	JWT := SignJWT(user.Username, secret)
 
+	session := sessions.Default(c)
+	session.Set("token", JWT.Token)
+	session.Set("email", user.Email)
+	session.Set("username", user.Username)
+	session.Save()
+
 	c.IndentedJSON(http.StatusOK, gin.H{
-		"id":       &user.Id,
-		"username": &user.Username,
-		"JWT":      JWT,
+		"message": "user authenticated succesfully",
 	})
 }
