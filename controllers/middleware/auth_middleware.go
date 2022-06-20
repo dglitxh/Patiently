@@ -5,13 +5,15 @@ import (
 
 	"github.com/dglitxh/patiently/models"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tokenVal := c.GetHeader("Authorization")
+		session := sessions.Default(c)
+		tokenVal := session.Get("token").(string)
 		claims := &models.Claims{}
 
 		tkn, err := jwt.ParseWithClaims(tokenVal, claims, func(t *jwt.Token) (interface{}, error) {

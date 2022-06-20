@@ -6,6 +6,7 @@ import (
 
 	"github.com/dglitxh/patiently/models"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
@@ -32,11 +33,12 @@ func RefreshJwt(c *gin.Context) {
 		return
 	}
 
-	jwtOutput := models.JWTOutput{
-		Token:   tokenString,
-		Expires: expirationTime,
-	}
+	session := sessions.Default(c)
+	session.Set("token", tokenString)
+	session.Save()
 
-	c.JSON(http.StatusOK, jwtOutput)
+	c.JSON(http.StatusOK, gin.H{
+		"message": "token updated succesfully.",
+	})
 
 }
