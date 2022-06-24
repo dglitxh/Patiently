@@ -49,9 +49,10 @@ func RegAuthRoutes(router *gin.Engine, db *gorm.DB) {
 	r.POST("/signup", h.SignupHandler)
 	r.POST("/login", h.LoginHandler)
 	r.GET("/logout", Logout)
+	r.GET("/refresh", RefreshJwt)
 
 	auth := r.Use(middleware.AuthMiddleware())
 	auth.GET("/users", h.GetUsers)
 	auth.GET("/user/:id", h.GetUser)
-	auth.GET("/refresh", RefreshJwt)
+
 }
