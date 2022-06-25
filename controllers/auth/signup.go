@@ -70,6 +70,7 @@ func (h handler) SignupHandler(c *gin.Context) {
 	session.Set("token", JWT.Token)
 	session.Set("email", creds.Email)
 	session.Set("username", creds.Username)
+	session.Set("user_id", creds.Id)
 	session.Save()
 
 	c.IndentedJSON(http.StatusOK, gin.H{
