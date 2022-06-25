@@ -1,13 +1,14 @@
 package models
 
 import (
-	"github.com/dgrijalva/jwt-go"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
+	"gorm.io/gorm"
 )
 
 type User struct {
-	Id        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at"`
+	gorm.Model
 	Username  string    `json:"username"`
 	Email     string    `json:"email"`
 	Password  string    `json:"password"`
