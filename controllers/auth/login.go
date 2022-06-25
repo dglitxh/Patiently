@@ -45,7 +45,7 @@ func (h handler) LoginHandler(c *gin.Context) {
 	session.Set("token", JWT.Token)
 	session.Set("email", user.Email)
 	session.Set("username", user.Username)
-	session.Set("user_id", user.Id)
+	session.Set("user_id", user.ID)
 	session.Save()
 
 	c.IndentedJSON(http.StatusOK, gin.H{
