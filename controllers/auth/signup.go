@@ -6,6 +6,7 @@ import (
 
 	"github.com/dglitxh/patiently/models"
 	"github.com/gin-contrib/sessions"
+	"github.com/rs/xid"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 
@@ -39,6 +40,7 @@ func (h handler) SignupHandler(c *gin.Context) {
 		return
 	}
 
+	creds.ID = xid.New().String()
 	creds.Password = string(password)
 	email := creds.Email
 
