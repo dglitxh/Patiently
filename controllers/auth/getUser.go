@@ -19,7 +19,7 @@ func (h handler) GetUser(c *gin.Context) {
 	}
 
 	c.IndentedJSON(http.StatusOK, gin.H{
-		"id":       &user.Id,
+		"id":       &user.ID,
 		"username": &user.Username,
 		"email":    &user.Email,
 	})
