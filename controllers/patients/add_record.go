@@ -1,9 +1,9 @@
 package patients
 
 import (
-	"net/http"
-
 	// "errors"
+	"net/http"
+	"strconv"
 
 	"github.com/dglitxh/patiently/models"
 	"github.com/gin-contrib/sessions"
@@ -16,7 +16,7 @@ func (h handler) NewRecord(c *gin.Context) {
 	var history models.MedicalHx
 	var user models.User
 	session := sessions.Default(c)
-	user_id := session.Get("user_id").(string)
+	user_id := session.Get("user_id").(uint)
 	id := c.Param("id")
 
 	if err := c.ShouldBindJSON(&history); err != nil {
@@ -34,17 +34,18 @@ func (h handler) NewRecord(c *gin.Context) {
 		return
 	}
 
-	// result := h.DB.First(&record, "patient=?", id)
+	// result := h.DB.First(&record, "patient=?", patient)
 	// if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
 	// 	c.JSON(http.StatusForbidden, gin.H{
-	// 		"status": "Record already available for this patient.",
+	// 		"status": result.Error,
 	// 	})
 	// 	return
 	// }
-
-	if res := h.DB.First(&user, "id=?", user_id); res.Error != nil {
+	user_idstring := strconv.Itoa(int(user_id))
+	if res := h.DB.First(&user, "id=?", user_idstring); res.Error != nil {
 		c.JSON(http.StatusBadRequest, res.Error)
 	}
+
 	record.History = append(record.History, history)
 	record.Patient = patient
 	record.User = user

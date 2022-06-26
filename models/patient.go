@@ -24,6 +24,6 @@ type MedicalHx struct {
 type Records struct {
 	gorm.Model
 	Patient Patient     `json:"patient" gorm:"foreignKey:ID"`
-	User    User        `json:"user" gorm:"foreignKey:Id"`
+	User    User        `json:"user" gorm:"foreignKey:ID"`
 	History []MedicalHx `gorm:"foreignKey:ID" json:"history"`
 }

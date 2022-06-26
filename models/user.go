@@ -4,14 +4,15 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"gorm.io/gorm"
 )
 
 type User struct {
-	gorm.Model
-	Username  string    `json:"username"`
-	Email     string    `json:"email"`
-	Password  string    `json:"password"`
+	ID        string `json:"id"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Username  string `json:"username"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
 }
 
 type Login struct {
