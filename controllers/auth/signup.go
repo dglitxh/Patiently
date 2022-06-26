@@ -3,15 +3,14 @@ package auth
 import (
 	"errors"
 	"net/http"
-	"time"
 
 	"github.com/dglitxh/patiently/models"
 	"github.com/gin-contrib/sessions"
+	"github.com/rs/xid"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rs/xid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -41,6 +40,7 @@ func (h handler) SignupHandler(c *gin.Context) {
 		return
 	}
 
+	creds.ID = xid.New().String()
 	creds.Password = string(password)
 	email := creds.Email
 
@@ -51,9 +51,6 @@ func (h handler) SignupHandler(c *gin.Context) {
 		})
 		return
 	}
-
-	creds.Id = xid.New().String()
-	creds.CreatedAt = time.Now()
 
 	if result := h.DB.Create(&creds); result.Error != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{
@@ -70,6 +67,7 @@ func (h handler) SignupHandler(c *gin.Context) {
 	session.Set("token", JWT.Token)
 	session.Set("email", creds.Email)
 	session.Set("username", creds.Username)
+	session.Set("user_id", creds.ID)
 	session.Save()
 
 	c.IndentedJSON(http.StatusOK, gin.H{

@@ -1,16 +1,18 @@
 package models
 
 import (
-	"github.com/dgrijalva/jwt-go"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 type User struct {
-	Id        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	Username  string    `json:"username"`
-	Email     string    `json:"email"`
-	Password  string    `json:"password"`
+	ID        string `json:"id"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Username  string `json:"username"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
 }
 
 type Login struct {
