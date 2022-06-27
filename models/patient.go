@@ -1,6 +1,8 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Patient struct {
 	gorm.Model
@@ -12,15 +14,16 @@ type Patient struct {
 }
 
 type MedicalHx struct {
+	gorm.Model
 	Code      string   `json:"code"`
 	Diagnosis string   `json:"diagnosis"`
 	PhysExam  string   `json:"physExam"`
-	PastHx    []string `json:"pastHx"`
+	PastHx    []string `gorm:"type:text[]" json:"pastHx"`
 }
 
 type Records struct {
 	gorm.Model
-	Patient Patient     `json:"patient"`
-	User    User        `json:"user" gorm:"foreignKey:Id"`
-	History []MedicalHx `json:"history"`
+	Patient Patient     `json:"patient" gorm:"foreignKey:ID"`
+	User    User        `json:"user" gorm:"foreignKey:ID"`
+	History []MedicalHx `gorm:"foreignKey:ID" json:"history"`
 }
