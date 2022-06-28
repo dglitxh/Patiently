@@ -16,6 +16,9 @@ func InitDb(db_url string) *gorm.DB {
 	}
 
 	db.AutoMigrate(&models.Patient{})
+	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Records{})
+	db.AutoMigrate(&models.MedicalHx{})
 
 	return db
 }

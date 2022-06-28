@@ -17,3 +17,10 @@ type MedicalHx struct {
 	PhysExam  string   `json:"physExam"`
 	PastHx    []string `json:"pastHx"`
 }
+
+type Records struct {
+	gorm.Model
+	Patient Patient     `json:"patient"`
+	User    User        `json:"user" gorm:"foreignKey:Id"`
+	History []MedicalHx `json:"history"`
+}
