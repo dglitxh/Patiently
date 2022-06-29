@@ -53,7 +53,9 @@ func RegRoutes(r *gin.Engine, db *gorm.DB, rdb *redis.Client) {
 
 	auth := route.Use(middleware.AuthMiddleware())
 	auth.POST("", h.NewPatientHandler)
+	auth.POST("/:id/new_record", h.NewRecord)
 	auth.PUT("/:id", h.UpdatePatientHandler)
+	auth.GET("/:id/records", h.GetPtRecords)
 	auth.DELETE("/:id", h.DeletePatient)
 
 }
