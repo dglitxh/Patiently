@@ -19,7 +19,7 @@ RUN apk --no-cache add ca-certificates
 
 WORKDIR /
 
-COPY --from=build patiently /patiently 
+COPY --from=build /patiently /patiently 
 
 EXPOSE 8080
 
