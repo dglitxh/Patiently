@@ -1,25 +1,26 @@
 # syntax=docker/dockerfile:1
-FROM golang:1.18-buster AS build
+FROM golang:1.16-buster as build
 
 WORKDIR /app
 
-COPY go.mod  ./
-COPY go.sum ./
+COPY go.mod ./
+COPY go.sum  ./
+
 RUN go mod download
 
-COPY *.go ./
+COPY ./ ./
 
-RUN go build -o /patiently
+RUN go build -o /patiently .
 
 
-FROM alpine:LATEST
+FROM alpine
+
+RUN apk --no-cache add ca-certificates
 
 WORKDIR /
 
-COPY --from=build /patiently /patiently
+COPY --from=build /patiently /patiently 
 
 EXPOSE 8080
-
-USER nonroot:nonroot
 
 ENTRYPOINT ["/patiently"]
