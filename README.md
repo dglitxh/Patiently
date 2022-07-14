@@ -1,1 +1,1 @@
-# Patiently is an api to store medical🚑 records
+# Patiently is an application to store medical🚑 records
